@@ -1,0 +1,10 @@
+# Ignoring ANTs Executables
+antsApplyTransforms
+antsRegistration
+
+# Ignoring byproducts of registration
+rigid_deform_matrix0GenericAffine.mat
+syn_deform_matrix0GenericAffine.mat
+syn_deform_matrix1InverseWarp.nii.gz
+syn_deform_matrix1Warp.nii.gz
+
