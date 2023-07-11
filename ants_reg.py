@@ -82,17 +82,25 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, output_path):
     # Load in fixed mask & get image
     vent_mask_nii = nb.load(vent_mask_path)
     vent_mask = vent_mask_nii.get_fdata()
+    vent_mask_array = vent_mask.flatten()
     # Convert this to Boolean
     vent_mask_bool = np.array(vent_mask, dtype = bool)
 
     # Load in registered whole lung sublobe mask
     sublobe_whole_reg_nii = nb.load(sublobe_whole_reg_path)
     sublobe_whole_reg = sublobe_whole_reg_nii.get_fdata()
-
+    sublobe_whole_reg_array = sublobe_whole_reg.flatten()
 
    # pdb.set_trace() 
      
+    #DICE SCORE CALCULATION
+    #common part
+    sublobe_tcv1 = sublobe_whole_reg_array[vent_mask_array == 1] #taking part of the sublobe array in a shape of the ventilation mask
+    common_part = np.count_nonzero(sublobe_tcv1) #calculating the common part of the sublobe array and ventilation mask array
+    dice_score = 2*common_part/((np.count_nonzero(vent_mask_array)+np.count_nonzero(sublobe_whole_reg_array)))
     # Output dice score
     print("\nHere is where the Dice score would be calculated\n")
+    print("Dice score: "+ str(round(dice_score,3)))
+
 
     return()
