@@ -36,9 +36,10 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
     # open CSV for writing
     
     filename = 'sublobe_'+subject_id+'_'+flavor+'.csv'
+    
     with open(processing_path + filename, 'w', newline = '') as csvfile:
         csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
-        csv_write.writerow(['subject_id', 'flavor', 'segment', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
+        csv_write.writerow(['subject_id', 'flavor', 'region', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
 
     # Populate lookup table
     sublobe_lookup = [None]*255
@@ -69,6 +70,72 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
     sublobe_lookup[64]  = 'ucRML'
     sublobe_lookup[128] = 'ucRLL'
 
+    #OUTPUT METRICS
+
+    left_lung_array = [1,2,3,4,5,6,7,102,104,105,106,8,16]
+    right_lung_array = [129,130,131,164,165,230,231,232,233,234,32,64,128]
+
+    part = ["whole", 'left', 'right', 'RUL', 'RML', 'RLL', 'LUL', 'LLL' ]
+    for i in part:
+        if i == "whole":
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element != 0] #we want to take the whole area of the lungs from sublobe_tcv so all the values except 0 (the background)
+
+        if i == "left":
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element in left_lung_array]
+
+        if i == "right":
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element in right_lung_array]
+
+        if i == 'RUL':  #RUL (Right Upper Lobe): RB1 + RB2 + RB3
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element == 129 or element == 130 or element == 131 or element == 32]
+
+        if i == 'RML':  #RML (Right Middle Lobe): RB4 + RB5
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element == 164 or element == 165 or element == 64]
+
+        if i == "RLL":  #RLL (Right Lower Lobe): RB6 + RB7 + RB8 + RB9 + RB10
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element == 230 or element == 231 or element == 232 or element == 233 or element == 234 or element == 128]
+
+        if i == "LUL":  #LUL (Left Upper Lobe): LB1 + LB2 + LB3 + LB4 + LB5
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element == 1 or element == 2 or element == 3 or element == 4 or element == 5 or element == 6 or element == 7 or element == 8]
+
+        if i == 'LLL':  #LLL (Left Lower Lobe): LB6 + LB8 + LB9 + LB10
+            dedvent_subset = [dedvent_tcv[i] for i, element in enumerate(sublobe_tcv) if element == 102 or element == 104 or element == 105 or element == 106 or element == 16]
+    
+        dedvent_subset_len = len(dedvent_subset)
+
+        dedvent_bin1 = dedvent_subset.count(1)
+        dedvent_bin1_pct = dedvent_bin1/dedvent_subset_len*100
+
+        dedvent_bin2 = dedvent_subset.count(2)
+        dedvent_bin2_pct = dedvent_bin2/dedvent_subset_len*100
+
+        dedvent_bin3 = dedvent_subset.count(3)
+        dedvent_bin3_pct = dedvent_bin3/dedvent_subset_len*100
+
+        dedvent_bin4 = dedvent_subset.count(4)
+        dedvent_bin4_pct = dedvent_bin4/dedvent_subset_len*100
+
+        dedvent_bin5 = dedvent_subset.count(5)
+        dedvent_bin5_pct = dedvent_bin5/dedvent_subset_len*100
+
+        dedvent_bin6 = dedvent_subset.count(6)
+        dedvent_bin6_pct = dedvent_bin6/dedvent_subset_len*100
+
+        dedvent_bin7 = dedvent_subset.count(7)
+        dedvent_bin7_pct = dedvent_bin7/dedvent_subset_len*100
+
+        dedvent_bin8 = dedvent_subset.count(8)
+        dedvent_bin8_pct = dedvent_bin8/dedvent_subset_len*100
+
+        checksum = dedvent_bin1_pct + dedvent_bin2_pct + dedvent_bin3_pct + dedvent_bin4_pct + dedvent_bin5_pct + dedvent_bin6_pct + dedvent_bin7_pct + dedvent_bin8_pct
+        print('For ' + i + '  this number should be 100%: ' +str(round(checksum,2))+'%')
+        
+        with open(processing_path + filename, 'a', newline = '') as csvfile:
+            csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
+            #csv_write.writerow(['subject_id', 'flavor', 'region', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
+            csv_write.writerow([subject_id, flavor, i, round(dedvent_bin1_pct,3), round(dedvent_bin2_pct,3), round(dedvent_bin3_pct,3), round(dedvent_bin4_pct,3), round(dedvent_bin5_pct,3), round(dedvent_bin6_pct,3), round(dedvent_bin7_pct,3), round(dedvent_bin8_pct,3)])
+
+
 
     for x in sublobe_values:
 
@@ -90,7 +157,7 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
         #print('LVP for seg ' +str(sublobe_lookup[i])+ ' is ' + str(round(dedvent_bin2_pct,1)))
 
         dedvent_vdp_lvp_pct = dedvent_bin1_pct + dedvent_bin2_pct
-       # print('VDP + LVP for seg ' +str(sublobe_lookup[i]) + ' is ' + str(round(dedvent_vdp_lvp_pct, 1)))
+        #print('VDP + LVP for seg ' +str(sublobe_lookup[i]) + ' is ' + str(round(dedvent_vdp_lvp_pct, 1)))
 
         dedvent_bin3 = np.count_nonzero(dedvent_subset == 3)
         dedvent_bin3_pct = dedvent_bin3/dedvent_subset_len*100
@@ -120,8 +187,7 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
 
         with open(processing_path + filename, 'a', newline = '') as csvfile:
             csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
-            #csv_write.writerow(['subject_id', 'flavor', 'segment', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
-            csv_write.writerow([subject_id, flavor, str(sublobe_lookup[i]), dedvent_bin1_pct, dedvent_bin2_pct, dedvent_bin3_pct, dedvent_bin4_pct, dedvent_bin5_pct, dedvent_bin6_pct, dedvent_bin7_pct, dedvent_bin8_pct])
+            csv_write.writerow([subject_id, flavor, str(sublobe_lookup[i]), round(dedvent_bin1_pct,3), round(dedvent_bin2_pct,3), round(dedvent_bin3_pct,3), round(dedvent_bin4_pct,3), round(dedvent_bin5_pct,3), round(dedvent_bin6_pct,3), round(dedvent_bin7_pct,3), round(dedvent_bin8_pct,3)])
             
             # Use CSV write function to start on new line in csv file
 
