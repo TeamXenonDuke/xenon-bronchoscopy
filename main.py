@@ -24,14 +24,14 @@ from generate_report import generate_report
 # Set Flags
 process_ct = 0 #1 = process CT, 0 = don't process CT
 run_reg = 3 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
-subject_id = 'OS-016_s1'
-flavor = 'gx' # 'vent' or 'gx' 
+subject_id = 'OS-017_s1'
+flavor = 'vent' # 'vent' or 'gx' 
 
 # Set paths
-orig_data_path = '/Users/mummy/Desktop/OS-016_workspace/orig_data/'
-processing_path = '/Users/mummy/Desktop/OS-016_workspace/processing_s1/'
+orig_data_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/orig_data/'
+processing_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/processing_data/'
 
-mat_path = orig_data_path + '/OS-016_s1_gx.mat'
+mat_path = orig_data_path + '/OS-017_s1_rad_vent.mat'
 
 
 # Don't touch anything past this. note -- you can leave the sublobe exported from ITK-Snap as a zipped nifti, you don't need to unzip it first.  
