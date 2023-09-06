@@ -24,14 +24,19 @@ from generate_report import generate_report
 # Set Flags
 process_ct = 0 #1 = process CT, 0 = don't process CT
 run_reg = 3 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
-subject_id = 'OS-017_s1'
+subject_id = 'OS-017'
+scan_id = 's1' #s1 or s2 etc.
 flavor = 'vent' # 'vent' or 'gx' 
 
 # Set paths
 orig_data_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/orig_data/'
 processing_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/processing_data/'
 
-mat_path = orig_data_path + '/OS-017_s1_rad_vent.mat'
+if flavor == 'vent':
+    mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + '_rad_' + flavor + '.mat' 
+if flavor == 'gx':
+    mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + flavor + '.mat'
+
 
 
 # Don't touch anything past this. note -- you can leave the sublobe exported from ITK-Snap as a zipped nifti, you don't need to unzip it first.  
@@ -71,12 +76,12 @@ ants_reg(run_reg, vent_mask_path, ct_whole_path, processing_path)
 
 # Generate the Vent report
 if flavor == 'vent':
-    generate_report(processing_path, subject_id, 'vent', vent_mask_path, vent_bin_path)
+    generate_report(processing_path, subject_id, scan_id, 'vent', vent_mask_path, vent_bin_path)
 
 if flavor == 'gx':
-    generate_report(processing_path, subject_id, 'gx_vent', vent_mask_path, vent_bin_path)
-    generate_report(processing_path, subject_id, 'bar', vent_mask_path, bar_bin_path)
-    generate_report(processing_path, subject_id, 'rbc', vent_mask_path, rbc_bin_path)
+    generate_report(processing_path, subject_id, scan_id,'gx_vent', vent_mask_path, vent_bin_path)
+    generate_report(processing_path, subject_id, scan_id, 'bar', vent_mask_path, bar_bin_path)
+    generate_report(processing_path, subject_id, scan_id, 'rbc', vent_mask_path, rbc_bin_path)
     
 
 
