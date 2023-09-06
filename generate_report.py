@@ -1,7 +1,7 @@
 # Generate Bronch Report Numbers
 # Begun by David Mummy 5/18/21
 
-def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedvent_bin_path):
+def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_path, dedvent_bin_path):
 
     import nibabel as nb
     import numpy as np
@@ -35,11 +35,11 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
 
     # open CSV for writing
     
-    filename = 'sublobe_'+subject_id+'_'+flavor+'.csv'
-    
+    #filename = 'sublobe_'+subject_id+'_'+flavor+'.csv'
+    filename = 'sublobe_'+subject_id+'_' + scan_id + '_' +flavor+'.csv'
     with open(processing_path + filename, 'w', newline = '') as csvfile:
         csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
-        csv_write.writerow(['subject_id', 'flavor', 'region', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
+        csv_write.writerow(['subject_id','scan', 'flavor', 'segment', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
 
     # Populate lookup table
     sublobe_lookup = [None]*255
@@ -187,7 +187,8 @@ def generate_report(processing_path, subject_id, flavor, dedvent_mask_path, dedv
 
         with open(processing_path + filename, 'a', newline = '') as csvfile:
             csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
-            csv_write.writerow([subject_id, flavor, str(sublobe_lookup[i]), round(dedvent_bin1_pct,3), round(dedvent_bin2_pct,3), round(dedvent_bin3_pct,3), round(dedvent_bin4_pct,3), round(dedvent_bin5_pct,3), round(dedvent_bin6_pct,3), round(dedvent_bin7_pct,3), round(dedvent_bin8_pct,3)])
+            #csv_write.writerow(['subject_id', 'flavor', 'segment', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
+            csv_write.writerow([subject_id, scan_id, flavor, str(sublobe_lookup[i]), dedvent_bin1_pct, dedvent_bin2_pct, dedvent_bin3_pct, dedvent_bin4_pct, dedvent_bin5_pct, dedvent_bin6_pct, dedvent_bin7_pct, dedvent_bin8_pct])
             
             # Use CSV write function to start on new line in csv file
 
