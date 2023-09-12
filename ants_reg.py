@@ -1,21 +1,21 @@
 # Function ants_reg
 
-def ants_reg(reg_type, vent_mask_path, ct_whole_path, output_path):
+def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to_processing_data):
    
     import os 
     import numpy as np
     import nibabel as nb
     import pdb
 
-    sublobe_whole_reg_path = output_path + 'sublobe_whole_reg.nii'
-    sublobe_transpose_path = output_path + 'sublobe_transpose.nii'
-    sublobe_reg_path = output_path + 'sublobe_transpose_reg.nii'
-    ct_path = output_path + 'ct.nii'
-    ct_reg_path = output_path + 'ct_reg.nii'
+    sublobe_whole_reg_path = path_to_processing_data + 'sublobe_whole_reg.nii'
+    sublobe_transpose_path = path_to_orig_data + 'sublobe_transpose.nii'
+    sublobe_reg_path = path_to_processing_data + 'sublobe_transpose_reg.nii'
+    ct_path = path_to_orig_data + 'ct.nii'
+    ct_reg_path = path_to_processing_data + 'ct_reg.nii'
 
     if reg_type == 1:
 
-        cmd_rigid = ('./antsRegistration -d 3 -verbose 1 '
+        cmd_rigid = ('./antsRegistration -d 3 --verbose 1 '
             '-o [rigid_deform_matrix, '+sublobe_whole_reg_path+'] -n BSpline '
             '-r ['+vent_mask_path+', '+ct_whole_path+',2] '
             '-t Rigid[0.15] '
@@ -29,7 +29,7 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, output_path):
 
     elif reg_type == 2:
        
-        cmd_syn_withmask_simple = ('./antsRegistration -d 3 -verbose 1 '
+        cmd_syn_withmask_simple = ('./antsRegistration -d 3 --verbose 1 '
             '-o [syn_deform_matrix, '+sublobe_whole_reg_path+'] -n BSpline '
             '-r ['+vent_mask_path+', '+ct_whole_path+',2] '
             '-t Rigid[0.15] '

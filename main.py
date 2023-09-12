@@ -22,15 +22,15 @@ from ants_reg import ants_reg
 from generate_report import generate_report
 
 # Set Flags
-process_ct = 0 #1 = process CT, 0 = don't process CT
-run_reg = 3 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
+process_ct = 1 #1 = process CT, 0 = don't process CT
+run_reg = 2 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
 subject_id = 'OS-017'
 scan_id = 's1' #s1 or s2 etc.
 flavor = 'vent' # 'vent' or 'gx' 
 
 # Set paths
-orig_data_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/orig_data/'
-processing_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data/processing_data/'
+orig_data_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data_tryout/orig_data/'
+processing_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data_tryout/processing_data/'
 
 if flavor == 'vent':
     mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + '_rad_' + flavor + '.mat' 
@@ -42,8 +42,11 @@ if flavor == 'gx':
 # Don't touch anything past this. note -- you can leave the sublobe exported from ITK-Snap as a zipped nifti, you don't need to unzip it first.  
 ct_path = orig_data_path + '/ct/'
 sublobe_path = orig_data_path + '/ZUNU_vida-sublobes.nii.gz'
-ct_whole_path = processing_path + '/ct_whole_lung_mask.nii'
-ct_nii_path = processing_path + '/ct.nii'
+#ct_whole_path = processing_path + '/ct_whole_lung_mask.nii'
+#ct_nii_path = processing_path + '/ct.nii'
+ct_whole_path = orig_data_path + '/ct_whole_lung_mask.nii'
+ct_nii_path = orig_data_path + '/ct.nii'
+
 
 ### Process CT and Sublobe 
 
@@ -52,7 +55,8 @@ if process_ct == 1:
     ct_nifti = dicom_process_ct(ct_path, ct_nii_path)
 
 # Turn Sublobe mask into a nifti
-sublobe_to_nii(sublobe_path, processing_path)
+#sublobe_to_nii(sublobe_path, processing_path)
+sublobe_to_nii(sublobe_path, orig_data_path)
 
 
 # Process Dedicated Vent 
@@ -72,7 +76,7 @@ if flavor == 'gx':
     mat_gx_to_nii(mat_path, processing_path)
 
 # Return to run ANTs call with whatever vent mask was specified    
-ants_reg(run_reg, vent_mask_path, ct_whole_path, processing_path)
+ants_reg(run_reg, vent_mask_path, ct_whole_path, orig_data_path, processing_path)
 
 # Generate the Vent report
 if flavor == 'vent':
