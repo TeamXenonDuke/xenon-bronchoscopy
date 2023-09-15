@@ -157,7 +157,7 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
         #print('LVP for seg ' +str(sublobe_lookup[i])+ ' is ' + str(round(dedvent_bin2_pct,1)))
 
         dedvent_vdp_lvp_pct = dedvent_bin1_pct + dedvent_bin2_pct
-        #print('VDP + LVP for seg ' +str(sublobe_lookup[i]) + ' is ' + str(round(dedvent_vdp_lvp_pct, 1)))
+       # print('VDP + LVP for seg ' +str(sublobe_lookup[i]) + ' is ' + str(round(dedvent_vdp_lvp_pct, 1)))
 
         dedvent_bin3 = np.count_nonzero(dedvent_subset == 3)
         dedvent_bin3_pct = dedvent_bin3/dedvent_subset_len*100
