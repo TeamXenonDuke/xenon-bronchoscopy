@@ -17,7 +17,7 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to
 
         cmd_rigid = ('./antsRegistration -d 3 --verbose 1 '
             '-o [rigid_deform_matrix, '+sublobe_whole_reg_path+'] -n BSpline '
-            '-r ['+vent_mask_path+', '+ct_whole_path+',2] '
+            '-r ['+vent_mask_path+', '+ct_whole_path+',1] '
             '-t Rigid[0.15] '
             '-m MI['+vent_mask_path+', '+ct_whole_path+', 1, 32, Regular, 1] '
             '-c [100x40x20, 1e-6, 10] -f 4x2x1 -s 0x0x0 '
@@ -31,7 +31,7 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to
        
         cmd_syn_withmask_simple = ('./antsRegistration -d 3 --verbose 1 '
             '-o [syn_deform_matrix, '+sublobe_whole_reg_path+'] -n BSpline '
-            '-r ['+vent_mask_path+', '+ct_whole_path+',2] '
+            '-r ['+vent_mask_path+', '+ct_whole_path+',1] '
             '-t Rigid[0.15] '
             '-m CC['+vent_mask_path+', '+ct_whole_path+', 1, 2] '
             '-c [100x50, 1e-6, 10] -f 4x2 -s 4x2 '
