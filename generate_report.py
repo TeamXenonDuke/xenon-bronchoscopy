@@ -133,7 +133,7 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
         with open(processing_path + filename, 'a', newline = '') as csvfile:
             csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
             #csv_write.writerow(['subject_id', 'flavor', 'region', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
-            csv_write.writerow([subject_id, flavor, i, round(dedvent_bin1_pct,3), round(dedvent_bin2_pct,3), round(dedvent_bin3_pct,3), round(dedvent_bin4_pct,3), round(dedvent_bin5_pct,3), round(dedvent_bin6_pct,3), round(dedvent_bin7_pct,3), round(dedvent_bin8_pct,3)])
+            csv_write.writerow([subject_id, scan_id, flavor, i, round(dedvent_bin1_pct,3), round(dedvent_bin2_pct,3), round(dedvent_bin3_pct,3), round(dedvent_bin4_pct,3), round(dedvent_bin5_pct,3), round(dedvent_bin6_pct,3), round(dedvent_bin7_pct,3), round(dedvent_bin8_pct,3)])
 
 
 
