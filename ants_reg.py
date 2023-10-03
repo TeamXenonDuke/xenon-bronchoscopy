@@ -40,7 +40,7 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to
             '-c [100x50x25, 1e-6, 10] -f 4x2x1 -s 4x2x1 '
             '-t Syn[0.4, 3.0, 0.1] '
             '-m CC['+vent_mask_path+', '+ct_whole_path+', 1, 2] '
-            '-c [50x25x10, 1e-8, 10] -f 4x2x1 -s 4x2x1 '
+            '-c [500x250x100, 1e-8, 10] -f 4x2x1 -s 4x2x1 '
             '-n multiLabel'
             )
 
