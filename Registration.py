@@ -4,8 +4,9 @@ moving_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/regist
 fixed_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/dedvent_mask.nii'
 output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/output_im_reg_affine.nii'
 reg_type = 2 #1 - Rigid, #2 - Affine, #3 - Syn
+label = 'multiLabel' #multiLabel , #linear - if applying to ct?
 
-def registration(moving_im_path, fixed_im_path, output_im_path, reg_type):
+def registration(moving_im_path, fixed_im_path, output_im_path, reg_type, label):
    
     import os 
     import numpy as np
@@ -20,7 +21,8 @@ def registration(moving_im_path, fixed_im_path, output_im_path, reg_type):
             '-t Rigid[0.15] '
             '-m MI['+fixed_im_path+', '+moving_im_path+', 1, 32, Regular, 1] '
             '-c [100x40x20, 1e-6, 10] -f 4x2x1 -s 0x0x0 '
-            '-n multiLabel'
+            #'-n multiLabel'
+            '-n ' +label+ ' '
             )
 
         os.system(cmd_rigid)
@@ -37,7 +39,8 @@ def registration(moving_im_path, fixed_im_path, output_im_path, reg_type):
             '-t Affine[0.4] '
             '-m CC['+fixed_im_path+', '+moving_im_path+', 1, 2] '
             '-c [100x50x25, 1e-6, 10] -f 4x2x1 -s 4x2x1 '
-            '-n multiLabel'
+            #'-n multiLabel'
+            '-n ' +label+ ' '
             )
         
         os.system(cmd_affine)
@@ -57,7 +60,8 @@ def registration(moving_im_path, fixed_im_path, output_im_path, reg_type):
             '-t Syn[0.4, 3.0, 0.1] '
             '-m CC['+fixed_im_path+', '+moving_im_path+', 1, 2] '
             '-c [500x250x100, 1e-8, 10] -f 4x2x1 -s 4x2x1 '
-            '-n multiLabel'
+            #'-n multiLabel'
+            '-n ' +label+ ' '
             )
 
         os.system(cmd_syn)
@@ -93,4 +97,4 @@ def registration(moving_im_path, fixed_im_path, output_im_path, reg_type):
     return()
 
 
-registration(moving_im_path, fixed_im_path, output_im_path, reg_type)
+registration(moving_im_path, fixed_im_path, output_im_path, reg_type, label)
