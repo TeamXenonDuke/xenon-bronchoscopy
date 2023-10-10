@@ -1,50 +1,68 @@
 # Set Flags
 im_to_apply_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/sublobe_transpose.nii'
 fixed_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/dedvent_mask.nii'
-output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/apply_reg_SyN_from_sublobe_transpose_linear.nii'
+output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/apply_backwards_reg_SyN_from_sublobe_transpose.nii'
 reg_type = 3 #1 - Rigid, #2 - Affine, #3 - Syn
-interpolation = 'linear' #multiLabel , #linear - if applying to ct?
+label = 'multiLabel' #multiLabel , #linear - if applying to ct?
+direction = "backwards" #forward, #backwards
 
-def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, interpolation):
+def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, label, direction):
    
     import os 
     import numpy as np
     import nibabel as nb
     import pdb
 
-    if reg_type == 1:
-        cmd_apply = ('./antsApplyTransforms -d 3 '
-            '-i ' +im_to_apply_path+ ' '
-            '-o ' +output_im_path+ ' '
-            #'-n multilabel '
-            '-n ' +interpolation+ ' '
-            '-r ' +fixed_im_path+ ' '
-            '-t rigid_deform_matrix0GenericAffine.mat '
-            # '-t syn_deform_matrix1Warp.nii.gz '
-            # '-t syn_deform_matrix0GenericAffine.mat '
-            ) 
-        
-        os.system(cmd_apply)
-        print('Applying rigid registration completed')
 
-    if reg_type in [2, 3]:
-        # Apply transform to sublobe mask
-        cmd_apply = ('./antsApplyTransforms -d 3 '
-            '-i ' +im_to_apply_path+ ' '
-            '-o ' +output_im_path+ ' '
-            '-n ' +interpolation+ ' '
-            '-r '+fixed_im_path+' '
-            '-t syn_deform_matrix1Warp.nii.gz '
-            '-t syn_deform_matrix0GenericAffine.mat '
-            )    
-           
-        os.system(cmd_apply)
-        print('Applying SyN registration completed')
+    if direction == 'forward':
+        if reg_type == 1:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +im_to_apply_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r ' +fixed_im_path+ ' '
+                '-t rigid_deform_matrix0GenericAffine.mat '
+                ) 
+            
+            os.system(cmd_apply)
+            print('Applying forward rigid registration completed')
+
+        if reg_type in [2, 3]:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +im_to_apply_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r '+fixed_im_path+' '
+                '-t syn_deform_matrix1Warp.nii.gz '
+                '-t syn_deform_matrix0GenericAffine.mat '
+                )    
+            
+            os.system(cmd_apply)
+            print('Applying forward SyN registration completed')
+
+    if direction =='backwards':
+        if reg_type == 3:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +fixed_im_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r '+im_to_apply_path+' '
+                '-t syn_deform_matrix1InverseWarp.nii.gz '
+                '-t syn_deform_matrix0GenericAffine.mat '
+                )    
+            
+            os.system(cmd_apply)
+            print('Applying backwards SyN registration completed')
+
+
 
     # Calculate Dice score
 
     # Load in fixed mask & get image
-    vent_mask_nii = nb.load(fixed_im_path)
+    if direction == 'forward':
+        vent_mask_nii = nb.load(fixed_im_path)
+    if direction == 'backwards':
+        vent_mask_nii = nb.load(im_to_apply_path)
     vent_mask = vent_mask_nii.get_fdata()
     vent_mask_array = vent_mask.flatten()
     # Convert this to Boolean
@@ -68,4 +86,4 @@ def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type
 
     return()
 
-apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, interpolation)
+apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, label, direction)
