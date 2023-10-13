@@ -1,9 +1,14 @@
-# Set Flags
-im_to_apply_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/sublobe_transpose.nii'
+# SET FLAGS
+
+#image to apply the registration maxtrix path
+im_to_apply_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/ct_whole_lung_mask.nii'
+#fixed image path
 fixed_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/dedvent_mask.nii'
-output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/apply_backwards_reg_SyN_from_sublobe_transpose.nii'
-reg_type = 3 #1 - Rigid, #2 - Affine, #3 - Syn
-label = 'multiLabel' #multiLabel , #linear - if applying to ct?
+#output image path
+output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/apply_backwards_reg_rigid_from_ct_whole_lung_mask_v2.nii'
+#rest of the flags
+reg_type = 1 #1 - Rigid, #2 - Affine, #3 - Syn
+label = 'multiLabel' #multiLabel - use if transforming masks (keeping the integer values), #linear - can use if applying to ct
 direction = "backwards" #forward, #backwards
 
 def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, label, direction):
@@ -11,7 +16,6 @@ def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type
     import os 
     import numpy as np
     import nibabel as nb
-    import pdb
 
 
     if direction == 'forward':
@@ -27,7 +31,19 @@ def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type
             os.system(cmd_apply)
             print('Applying forward rigid registration completed')
 
-        if reg_type in [2, 3]:
+        if reg_type == 2:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +im_to_apply_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r '+fixed_im_path+' '
+                '-t affine_deform_matrix0GenericAffine.mat '
+                )    
+            
+            os.system(cmd_apply)
+            print('Applying forward affine registration completed')
+
+        if reg_type == 3:
             cmd_apply = ('./antsApplyTransforms -d 3 '
                 '-i ' +im_to_apply_path+ ' '
                 '-o ' +output_im_path+ ' '
@@ -41,14 +57,40 @@ def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type
             print('Applying forward SyN registration completed')
 
     if direction =='backwards':
+        if reg_type == 1:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +fixed_im_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r '+im_to_apply_path+' '
+                '-t [rigid_deform_matrix0GenericAffine.mat ,1] '
+                )    
+            
+            os.system(cmd_apply)
+            print('Applying backwards rigid registration completed')
+
+
+        if reg_type == 2:
+            cmd_apply = ('./antsApplyTransforms -d 3 '
+                '-i ' +fixed_im_path+ ' '
+                '-o ' +output_im_path+ ' '
+                '-n ' +label+ ' '
+                '-r '+im_to_apply_path+' '
+                '-t [affine_deform_matrix0GenericAffine.mat ,1] '
+                )    
+            
+            os.system(cmd_apply)
+            print('Applying backwards affine registration completed')
+
+
         if reg_type == 3:
             cmd_apply = ('./antsApplyTransforms -d 3 '
                 '-i ' +fixed_im_path+ ' '
                 '-o ' +output_im_path+ ' '
                 '-n ' +label+ ' '
                 '-r '+im_to_apply_path+' '
+                '-t [syn_deform_matrix0GenericAffine.mat ,1] '
                 '-t syn_deform_matrix1InverseWarp.nii.gz '
-                '-t syn_deform_matrix0GenericAffine.mat '
                 )    
             
             os.system(cmd_apply)
@@ -77,8 +119,8 @@ def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type
      
     #DICE SCORE CALCULATION
     #common part
-    sublobe_tcv1 = sublobe_whole_reg_array[vent_mask_array == 1] #taking part of the sublobe array in a shape of the ventilation mask
-    common_part = np.count_nonzero(sublobe_tcv1) #calculating the common part of the sublobe array and ventilation mask array
+    sublobe_tcv1 = sublobe_whole_reg_array[vent_mask_array == 1] #taking part of the output im array in a shape of the fixed image array
+    common_part = np.count_nonzero(sublobe_tcv1) #calculating the common part of the two masks
     dice_score = 2*common_part/((np.count_nonzero(vent_mask_array)+np.count_nonzero(sublobe_whole_reg_array)))
     # Output dice score
     print("Dice score: "+ str(round(dice_score,3)))
