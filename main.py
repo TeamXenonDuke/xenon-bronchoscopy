@@ -23,7 +23,7 @@ from generate_report import generate_report
 
 # Set Flags
 process_ct = 1 #1 = process CT, 0 = don't process CT
-run_reg = 2 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
+run_reg = 3 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
 subject_id = 'OS-017'
 scan_id = 's1' #s1 or s2 etc.
 flavor = 'vent' # 'vent' or 'gx' 
@@ -55,7 +55,6 @@ if process_ct == 1:
     ct_nifti = dicom_process_ct(ct_path, ct_nii_path)
 
 # Turn Sublobe mask into a nifti
-#sublobe_to_nii(sublobe_path, processing_path)
 sublobe_to_nii(sublobe_path, orig_data_path)
 
 
