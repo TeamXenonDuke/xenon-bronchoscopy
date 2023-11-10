@@ -70,7 +70,7 @@ if flavor == 'gx':
     vent_mask_path = processing_path + '/gx_vent_mask.nii'
     vent_bin_path = processing_path + '/gx_vent_bin.nii'
     vent_norm_path = processing_path + '/gx_vent_norm.nii'
-    bar_bin_path = processing_path + '/bar_bin.nii'
+    mem_bin_path = processing_path + '/mem_bin.nii'
     rbc_bin_path = processing_path + '/rbc_bin.nii'
 
     mat_gx_to_nii(mat_path, processing_path)
@@ -84,7 +84,7 @@ if flavor == 'vent':
 
 if flavor == 'gx':
     generate_report(processing_path, subject_id, scan_id,'gx_vent', vent_mask_path, vent_bin_path)
-    generate_report(processing_path, subject_id, scan_id, 'bar', vent_mask_path, bar_bin_path)
+    generate_report(processing_path, subject_id, scan_id, 'mem', vent_mask_path, mem_bin_path)
     generate_report(processing_path, subject_id, scan_id, 'rbc', vent_mask_path, rbc_bin_path)
     
 

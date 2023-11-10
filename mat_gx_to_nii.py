@@ -1,5 +1,5 @@
 # FUNCTION mat_gx_to_nii
-# Provide a mat file path and a string, and return the normalized UTE, mask, normalized vent, and non-normalized barrier and RBC
+# Provide a mat file path and a string, and return the normalized UTE, mask, normalized vent, and non-normalized membrane and RBC
 
 def mat_gx_to_nii(mat_path, data_path):
 
@@ -71,43 +71,43 @@ def mat_gx_to_nii(mat_path, data_path):
     nb.save(gx_vent_mask_nii, gx_vent_mask_path)
 
 
-    # EVERYTHING BARRIER
+    # EVERYTHING MEMBRANE
     # Data
 
-    barrier_path = data_path + 'bar.nii'
-    barrier = np.absolute(matfile['bar2gas'])
+    membrane_path = data_path + 'mem.nii'
+    membrane = np.absolute(matfile['bar2gas'])
 
     # Put it in the correct orientation
-    barrier_transpose = np.transpose(barrier, (1, 0, 2))
+    membrane_transpose = np.transpose(membrane, (1, 0, 2))
 
     # Make it into a nifti object
-    barrier_nii = nb.Nifti1Image(barrier_transpose.astype(float), np.eye(4))
+    membrane_nii = nb.Nifti1Image(membrane_transpose.astype(float), np.eye(4))
 
     # Put the correct dimensions in the header 
-    barrier_nii.header['pixdim'] = np.array([1., 3.125, 3.125, 3.125, 0., 0., 0., 0.])
+    membrane_nii.header['pixdim'] = np.array([1., 3.125, 3.125, 3.125, 0., 0., 0., 0.])
     
-    barrier_nii.header.set_qform(None, code =2)
+    membrane_nii.header.set_qform(None, code =2)
 
     # Save it as a file
-    nb.save(barrier_nii, barrier_path)
+    nb.save(membrane_nii, membrane_path)
 
-    # Barrier Binning
-    barrier_bin_path = data_path + 'bar_bin.nii'
-    barrier_bin = np.absolute(matfile['bar2gas_binning'])
+    # Membrane Binning
+    membrane_bin_path = data_path + 'mem_bin.nii'
+    membrane_bin = np.absolute(matfile['bar2gas_binning'])
 
     # Put it in the correct orientation
-    barrier_bin_transpose = np.transpose(barrier_bin, (1, 0, 2))
+    membrane_bin_transpose = np.transpose(membrane_bin, (1, 0, 2))
 
     # Make it into a nifti object
-    barrier_bin_nii = nb.Nifti1Image(barrier_bin_transpose.astype(float), np.eye(4))
+    membrane_bin_nii = nb.Nifti1Image(membrane_bin_transpose.astype(float), np.eye(4))
 
     # Put the correct dimensions in the header 
-    barrier_bin_nii.header['pixdim'] = np.array([1., 3.125, 3.125, 3.125, 0., 0., 0., 0.])
+    membrane_bin_nii.header['pixdim'] = np.array([1., 3.125, 3.125, 3.125, 0., 0., 0., 0.])
     
-    barrier_bin_nii.header.set_qform(None, code =2)
+    membrane_bin_nii.header.set_qform(None, code =2)
 
     # Save it as a file
-    nb.save(barrier_bin_nii, barrier_bin_path)
+    nb.save(membrane_bin_nii, membrane_bin_path)
 
 
 
