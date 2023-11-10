@@ -75,7 +75,7 @@ def mat_gx_to_nii(mat_path, data_path):
     # Data
 
     membrane_path = data_path + 'mem.nii'
-    membrane = np.absolute(matfile['mem2gas'])
+    membrane = np.absolute(matfile['bar2gas'])
 
     # Put it in the correct orientation
     membrane_transpose = np.transpose(membrane, (1, 0, 2))
@@ -93,7 +93,7 @@ def mat_gx_to_nii(mat_path, data_path):
 
     # Membrane Binning
     membrane_bin_path = data_path + 'mem_bin.nii'
-    membrane_bin = np.absolute(matfile['mem2gas_binning'])
+    membrane_bin = np.absolute(matfile['bar2gas_binning'])
 
     # Put it in the correct orientation
     membrane_bin_transpose = np.transpose(membrane_bin, (1, 0, 2))
