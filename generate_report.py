@@ -128,7 +128,9 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
         dedvent_bin8_pct = dedvent_bin8/dedvent_subset_len*100
 
         checksum = dedvent_bin1_pct + dedvent_bin2_pct + dedvent_bin3_pct + dedvent_bin4_pct + dedvent_bin5_pct + dedvent_bin6_pct + dedvent_bin7_pct + dedvent_bin8_pct
-        print('For ' + i + '  this number should be 100%: ' +str(round(checksum,2))+'%')
+        if flavor == 'vent' or flavor == 'gx_vent':
+            if (round(checksum,2)) != 100.0:
+                print("For " + i + "  this number should be 100%, but it's " + str(round(checksum,2)))
         
         with open(processing_path + filename, 'a', newline = '') as csvfile:
             csv_write = csv.writer(csvfile, delimiter = ',', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
@@ -190,23 +192,24 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
             #csv_write.writerow(['subject_id', 'flavor', 'segment', 'bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8'])
             csv_write.writerow([subject_id, scan_id, flavor, str(sublobe_lookup[i]), float(round(dedvent_bin1_pct,3)), float(round(dedvent_bin2_pct,3)), float(round(dedvent_bin3_pct,3)), float(round(dedvent_bin4_pct,3)), float(round(dedvent_bin5_pct,3)), float(round(dedvent_bin6_pct,3)), float(round(dedvent_bin7_pct,3)), float(round(dedvent_bin8_pct,3))])
             
-            # Use CSV write function to start on new line in csv file
 
         # Need to do better error checking here. Break out of this loop to get total sums of volumes etc. Do the parts properly add up to the whole? 
-        print('For vent, this number should be 100%: ' +str(round(checksum,2))+'%')
+        if flavor == 'vent' or flavor == 'gx_vent':
+            if (round(checksum,2)) != 100.0:
+                print("For vent this number should be 100%, but it's " + str(round(checksum,2)) +'%')
 
+    if flavor == 'vent' or flavor == 'gx_vent':
+        dedvent_uncovered = dedvent_tcv[sublobe_tcv == 0]
+        print('MRI volume outside CT: ' + str(round(len(dedvent_uncovered)*3.125**3/10**6,2)) + 'L')
+        ct_uncovered = sublobe_tcv[dedvent_tcv == 0]
+        print('CT volume outside MRI: ' + str(round(len(ct_uncovered)*3.125**3/10**6,2)) + 'L')
+        print('\n')
+        print('MRI TCV volume check: '+ str(round(len(dedvent_tcv)*3.125**3/10**6,2)) + 'L')
+        whole_lung_vdp = len(dedvent_tcv[dedvent_tcv == 1])/len(dedvent_tcv)
+        print("Whole Lung VDP: " + str(round(whole_lung_vdp*100,1)))
+        whole_lung_lvp = len(dedvent_tcv[dedvent_tcv == 2])/len(dedvent_tcv)
+        print('Whole lung LVP: ' + str(round(whole_lung_lvp*100,1)))
+        whole_lung_hvp = len(dedvent_tcv[dedvent_tcv == 6])/len(dedvent_tcv)    
+        print('Whole lung HVP: ' + str(round(whole_lung_hvp*100,1)))
 
-    whole_lung_vdp = len(dedvent_tcv[dedvent_tcv == 1])/len(dedvent_tcv)
-    print('Whole lung Defect check: ' + str(round(whole_lung_vdp*100,1)))
-
-    whole_lung_lvp = len(dedvent_tcv[dedvent_tcv == 2])/len(dedvent_tcv)
-    print('Whole lung Low check: ' + str(round(whole_lung_lvp*100,1)))
-
-    print('Whole lung vent volume check: ' + str(round(len(dedvent_tcv)*3.125**3/10**6,2)) + 'L')
-
-    dedvent_uncovered = dedvent_tcv[sublobe_tcv == 0]
-    print('Vent volume outside CT: ' + str(round(len(dedvent_uncovered)*3.125**3/10**6,2)) + 'L')
-    print('\n')
-    #print('CT-Covered Vent Volume:
-    
     return()

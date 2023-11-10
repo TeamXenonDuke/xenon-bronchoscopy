@@ -90,8 +90,7 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to
     sublobe_whole_reg_nii = nb.load(sublobe_whole_reg_path)
     sublobe_whole_reg = sublobe_whole_reg_nii.get_fdata()
     sublobe_whole_reg_array = sublobe_whole_reg.flatten()
-
-   # pdb.set_trace() 
+ 
      
     #DICE SCORE CALCULATION
     #common part
@@ -99,7 +98,6 @@ def ants_reg(reg_type, vent_mask_path, ct_whole_path, path_to_orig_data, path_to
     common_part = np.count_nonzero(sublobe_tcv1) #calculating the common part of the sublobe array and ventilation mask array
     dice_score = 2*common_part/((np.count_nonzero(vent_mask_array)+np.count_nonzero(sublobe_whole_reg_array)))
     # Output dice score
-    print("\nHere is where the Dice score would be calculated\n")
     print("Dice score: "+ str(round(dice_score,3)))
 
 
