@@ -1,6 +1,6 @@
 # SET FLAGS
 
-#image to apply the registration maxtrix path
+#image to apply the registration to (the 'moving image' that we are trying to register)
 im_to_apply_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/ct_whole_lung_mask.nii'
 #fixed image path
 fixed_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/registration_playground/OS_17/dedvent_mask.nii'
@@ -9,7 +9,7 @@ output_im_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/regist
 #rest of the flags
 reg_type = 1 #1 - Rigid, #2 - Affine, #3 - Syn
 label = 'multiLabel' #multiLabel - use if transforming masks (keeping the integer values), #linear - can use if applying to ct
-direction = "backwards" #forward, #backwards
+direction = "backwards" #forward, #backwards - when using backwards direction, the fixed image will be registered to the space of moving image
 
 def apply_registration(im_to_apply_path, fixed_im_path, output_im_path, reg_type, label, direction):
    
