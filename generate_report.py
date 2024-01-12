@@ -21,7 +21,7 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
 
     sublobe_array = sublobe_img.flatten()
     dedvent_mask_array = dedvent_mask_img.flatten()
-    dedvent_bin_array = dedvent_bin_img.flatten() - 1
+    dedvent_bin_array = dedvent_bin_img.flatten() #for pre-refactor, subtract 1
 
     # But we only want values within the lung
 
@@ -30,7 +30,7 @@ def generate_report(processing_path, subject_id, scan_id,  flavor, dedvent_mask_
 
 
     # Get sublobe values & length of array
-    sublobe_values = np.unique(sublobe_array)
+    sublobe_values = np.unique(sublobe_tcv)
     sublobe_values_len = len(sublobe_values)
 
     # open CSV for writing

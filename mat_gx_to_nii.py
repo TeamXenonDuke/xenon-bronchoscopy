@@ -13,7 +13,7 @@ def mat_gx_to_nii(mat_path, data_path):
 
     # EVERYTHING GX GAS
     gx_vent_path = data_path + 'gx_vent_norm.nii'
-    gx_vent = np.absolute(matfile['gx_vent_highreso'])
+    gx_vent = np.absolute(matfile['image_gas_highreso']) #pre-refactor name: 'gx_vent_highreso'
     gx_vent_norm = (gx_vent - np.amin(gx_vent))/np.amax(gx_vent)
 
     # Put it in the correct orientation
@@ -33,7 +33,7 @@ def mat_gx_to_nii(mat_path, data_path):
 
     # Ventilation binning
     gx_vent_bin_path = data_path + 'gx_vent_bin.nii'
-    gx_vent_bin = np.absolute(matfile['gx_vent_highreso_binning'])
+    gx_vent_bin = np.absolute(matfile['image_gas_binned']) # pre-refactor name: 'gx_vent_highreso_binning'
 
     # Put it in the correct orientation
     gx_vent_bin_transpose = np.transpose(gx_vent_bin, (1, 0, 2))
@@ -75,7 +75,7 @@ def mat_gx_to_nii(mat_path, data_path):
     # Data
 
     membrane_path = data_path + 'mem.nii'
-    membrane = np.absolute(matfile['bar2gas'])
+    membrane = np.absolute(matfile['image_membrane2gas']) #pre-refactor name: 'bar2gas'
 
     # Put it in the correct orientation
     membrane_transpose = np.transpose(membrane, (1, 0, 2))
@@ -93,7 +93,7 @@ def mat_gx_to_nii(mat_path, data_path):
 
     # Membrane Binning
     membrane_bin_path = data_path + 'mem_bin.nii'
-    membrane_bin = np.absolute(matfile['bar2gas_binning'])
+    membrane_bin = np.absolute(matfile['image_membrane2gas_binned']) #pre-refactor 'bar2gas_binning' 
 
     # Put it in the correct orientation
     membrane_bin_transpose = np.transpose(membrane_bin, (1, 0, 2))
@@ -114,7 +114,7 @@ def mat_gx_to_nii(mat_path, data_path):
     # EVERYTHING RBC 
     # Data
     rbc_path = data_path + 'rbc.nii'
-    rbc = np.absolute(matfile['rbc2gas'])
+    rbc = np.absolute(matfile['image_rbc2gas']) #pre-refactor name: 'rbc2gas'
 
     # Put it in the correct orientation
     rbc_transpose = np.transpose(rbc, (1, 0, 2))
@@ -132,7 +132,7 @@ def mat_gx_to_nii(mat_path, data_path):
 
     # Bin
     rbc_bin_path = data_path + 'rbc_bin.nii'
-    rbc_bin = np.absolute(matfile['rbc2gas_binning'])
+    rbc_bin = np.absolute(matfile['image_rbc2gas_binned']) #pre-refactor name:'rbc2gas_binning'
 
     # Put it in the correct orientation
     rbc_bin_transpose = np.transpose(rbc_bin, (1, 0, 2))
