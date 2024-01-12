@@ -23,19 +23,19 @@ from generate_report import generate_report
 
 # Set Flags
 process_ct = 1 #1 = process CT, 0 = don't process CT
-run_reg = 3 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
-subject_id = 'OS-017'
-scan_id = 's1' #s1 or s2 etc.
-flavor = 'vent' # 'vent' or 'gx' 
+run_reg = 2 #1 = rigid, 2 = syn, 3 = apply registrations only (i.e. reg already performed) 
+subject_id = '007-02-001'
+scan_id = 's2' #s1 or s2 etc.
+flavor = 'gx' # 'vent' or 'gx' 
 
 # Set paths
-orig_data_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data_tryout/orig_data/'
-processing_path = '/mnt/c/Users/Asia/OneDrive/Pulpit/Team_Xenon/Xenon_data/OS_017_sample_data_tryout/processing_data/'
+orig_data_path = '/Users/andrewmchorse/Desktop/007-02-001/'
+processing_path = '/Users/andrewmchorse/Desktop/007-02-001_output/'
 
 if flavor == 'vent':
     mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + '_rad_' + flavor + '.mat' 
 if flavor == 'gx':
-    mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + flavor + '.mat'
+    mat_path = orig_data_path + '/' + subject_id + '_' + scan_id + '_' + flavor + '.mat'
 
 
 
