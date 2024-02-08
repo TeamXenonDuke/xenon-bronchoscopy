@@ -71,7 +71,7 @@ def mat_gx_to_nii(mat_path, data_path):
     # GX Ventilation mask
     gx_vent_mask_path = data_path + 'gx_vent_mask.nii'
 
-    gx_vent_mask = gx_vent_bin - 1
+    gx_vent_mask = gx_vent_bin 
     gx_vent_mask[gx_vent_mask > 1] = 1
 
     # Put it in the correct orientation
